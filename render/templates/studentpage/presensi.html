@@ -1,0 +1,65 @@
+{% extends 'studentpage/main.html' %}
+{% block content %}
+
+<div class="head-title">
+    <div class="left">
+        <h1>Daftar Presensi</h1>
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+                <a class="active" href="#">Daftar Presensi</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<form action="{% url 'presensi' %}" method="GET" class="mt-3">
+    <div class="form-group row">
+      <label for="datepicker" class="col-form-label col-md-2">Date:</label>
+      <div class="col-md-4">
+        <input type="date" id="datepicker" name="date" class="form-control" required>
+      </div>
+    </div>
+  </form>
+
+<div class="table-data">
+    <div class="order">
+      <div class="head">
+        <h3>Daftar Hadir</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID Siswa</th>
+            <th>Nama Siswa</th>
+            <th>Date</th>
+            <th>Jam</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in filtered_data %}
+          <tr>
+            <td>{{ item.roll }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+  
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const datepicker = document.getElementById('datepicker');
+      const currentDate = new Date().toISOString().split('T')[0];
+      datepicker.value = currentDate;
+    });
+  </script>
+
+{% endblock content %}

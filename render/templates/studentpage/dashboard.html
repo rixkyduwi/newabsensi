@@ -1,0 +1,94 @@
+{% extends 'studentpage/main.html' %}
+{% load static %}
+{% block content %}
+<!-- MAIN -->
+
+<div class="head-title">
+  <div class="left">
+    <h1>Dashboard</h1>
+    <ul class="breadcrumb">
+      <li>
+        <a href="#">Home</a>
+      </li>
+      <li><i class='bx bx-chevron-right'></i></li>
+      <li>
+        <a class="active" href="#">Dashboard</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- <div class="alert alert-success" role="alert">
+  {% for message in messages %}
+      <p id="message">{{message}}</p>
+  {% endfor %}
+</div> -->
+
+<ul class="box-info">
+  <div class="col-lg-4">
+    <li>
+      <i class='bx bxs-camera'></i>
+      <form class="form-signin" method="post" onsubmit="return false;">
+        {% csrf_token %}
+        <span class="text">
+          <h3>Absensi</h3>
+        </span>
+        <button id="cameraBtn" class="btn btn-primary" onclick="showImage()" type="button">Detect By Camera</button>
+        <button id="presensiBtn" class="btn btn-primary" onclick="switchToPresensi()" type="button" style="display: none;">Lihat presensi</button>
+      </form>
+      
+
+  </div>
+</ul>
+<div>
+  <ul>
+    <li>
+
+      <img id="imageSrc" width="720" height="560"> 
+    </li>
+  </ul>
+</div>
+<!-- MAIN -->
+</section>
+<!-- CONTENT -->
+<script>
+  // Mengambil elemen tombol
+  var cameraBtn = document.getElementById('cameraBtn');
+  var presensiBtn = document.getElementById('presensiBtn');
+  var imageSrc = document.getElementById("imageSrc");
+
+  // Mendapatkan waktu saat ini
+  var currentTime = new Date().getHours();
+
+  // Menentukan batasan waktu
+  var startTime = 0; // Jam mulai (07:00)
+  var endTime = 24; // Jam berakhir (15:30)
+
+  // Memeriksa apakah waktu saat ini berada dalam rentang yang diizinkan
+  if (currentTime >= startTime && currentTime < endTime) {
+    // Mengaktifkan tombol jika waktu saat ini dalam rentang yang diizinkan
+    cameraBtn.disabled = false;
+  } else {
+    // Menonaktifkan tombol jika waktu saat ini diluar rentang yang diizinkan
+    cameraBtn.disabled = true;
+  }
+
+  function showImage() {
+    // Ganti atribut src dari elemen gambar dengan URL yang sesuai
+    imageSrc.src = "{% url 'video_feed' %}";
+    cameraBtn.disabled = true; // Menonaktifkan tombol "Detect By Camera"
+    presensiBtn.style.display = "none"; // Menyembunyikan tombol "Lihat presensi"
+
+    setTimeout(function() {
+      imageSrc.src = ""; // Mematikan video dengan menghapus src
+      cameraBtn.disabled = false; // Mengaktifkan kembali tombol "Detect By Camera"
+      presensiBtn.style.display = "inline-block"; // Menampilkan tombol "Lihat presensi"
+    }, 10000); // 5000 milidetik = 5 detik
+  }
+
+  function switchToPresensi() {
+    window.location.href = "{% url 'presensi' %}";
+  }
+</script>
+
+{% endblock %}
